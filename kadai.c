@@ -31,7 +31,12 @@ int main(void)
     }
 
     // メインループ処理
-    while (condition)
+    while ((ch == fgetc(inputFile) != EOF)){
+        // 条件に応じて文字を処理
+        if(isalpha(ch) || ch == ' ' || ch == '\n'){
+            fputc(ch, outputFile);
+        }
+    }
     {
         /* code */
     }
