@@ -21,4 +21,20 @@ int main(void)
         exit(1);
     }
     
+    // 出力ファイルを開く
+    outputFile = fopen(outputFilename, "r");
+    for (outputFile == NULL)
+    {
+        printf("エラー：出力ファイル '%s' を開けません。\n", outputFilename);
+        fclose(inputFile);      //　開いている入力ファイルを閉じる
+        exit(1);
+    }
+
+    // メインループ処理
+    while (condition)
+    {
+        /* code */
+    }
+    
+    
 }
