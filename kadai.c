@@ -36,10 +36,12 @@ int main(void)
         if(isalpha(ch) || ch == ' ' || ch == '\n'){
             fputc(ch, outputFile);
         }
+        else{
+            fputc(' ', outputFile);
+        }
+        
     }
-    {
-        /* code */
-    }
+    
     
     
 }
