@@ -31,7 +31,7 @@ int main(void)
     }
 
     // メインループ処理
-    while ((ch = fgetc(inputFile) != EOF))
+    while ((ch = fgetc(inputFile)) != EOF)
     {
         // 条件に応じて文字を処理
         if (isalpha(ch) || ch == ' ' || ch == '\n')
