@@ -9,8 +9,8 @@ int main(void)
     FILE *outputFile;
 
     // アルファベットの出現頻度を記録するための配列
-    char alphabet_counts[26] = {0};
-    char ch; // 読み込んだ文字を格納
+    int alphabet_counts[26] = {0};
+    int ch; // 読み込んだ文字を格納
 
     // 入力ファイルを開く(読み込みモードで)
     inputFile = fopen("Input.txt", "r");
@@ -41,7 +41,7 @@ int main(void)
             }
             else if (!isupper(ch)){
                 int index_a = ch - 'a';
-                alphabet_counts[index_a];
+                alphabet_counts[index_a]++;
             }
             
             fputc(ch, outputFile);
@@ -55,14 +55,18 @@ int main(void)
             fputc(' ', outputFile);
         }
     }
-    for (int i = 0; i < 26; i++)[
-        
-    ]
+ 
+    
     // ファイルを閉じる
     fclose(inputFile);
     fclose(outputFile);
 
     printf("出力が完了しました。\n");
+    printf("------------------------------\n");
+       for (int i = 0; i < 26; i++){
+        printf("%d %c\n", alphabet_counts[i], 'a'+ i);      // %dは出た文字の回数、%cは文字を出力する
+    }
+
 
     return 0;
 }
