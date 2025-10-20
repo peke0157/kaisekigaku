@@ -35,17 +35,15 @@ int main(void)
         // 条件に応じて文字を処理
         if (isalpha(ch))
         {
-            if (isupper(ch))
-            {
-                int index_A = ch - 'A';
+            if(isupper(ch)){
+                int index_A = ch -'A';
                 alphabet_counts[index_A]++;
             }
-            else
-            {
+            else if (!isupper(ch)){
                 int index_a = ch - 'a';
                 alphabet_counts[index_a]++;
             }
-
+            
             fputc(ch, outputFile);
         }
         else if (ch == ' ' || ch == '\n')
@@ -57,17 +55,18 @@ int main(void)
             fputc(' ', outputFile);
         }
     }
-
+ 
+    
     // ファイルを閉じる
     fclose(inputFile);
     fclose(outputFile);
 
     printf("出力が完了しました。\n");
     printf("------------------------------\n");
-    for (int i = 0; i < 26; i++)
-    {
-        printf("%d %c\n", alphabet_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
+       for (int i = 0; i < 26; i++){
+        printf("%d %c\n", alphabet_counts[i], 'a'+ i);      // %dは出た文字の回数、%cは文字を出力する
     }
+
 
     return 0;
 }
