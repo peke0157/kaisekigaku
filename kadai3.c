@@ -2,6 +2,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// 2組と出現頻度を保存する構造体
+typedef struct 
+{
+    char bigram[3];     // ex) 'he' + '0\' で3バイト
+    int count;
+}BigramFreq;
+
+// 3組と出現頻度を保存する構造体
+typedef struct{
+    char ngram[4];      // 'the' + '\0' で4バイト
+    int count;
+}Ngram;
+
 int main(void)
 {
     // ファイルポインタの宣言
@@ -39,12 +52,12 @@ int main(void)
             if (isupper(ch))
             {
                 int index_A = ch - 'A';
-                alupper_counts[index_A]++;
+                nijigen_counts[index_A]++;
             }
             else if (islower(ch))
             {
                 int index_a = ch - 'a';
-                allower_counts[index_a]++;
+                sanjigen_counts[index_a]++;
             }
 
             fputc(ch, outputFile);
@@ -69,13 +82,13 @@ int main(void)
     //大文字の場合
     for (int i = 0; i < 26; i++)
     {
-        printf("%d %c\n", alupper_counts[i], 'A' + i); // %dは出た文字の回数、%cは文字を出力する
+        printf("%d %c\n", nijigen_counts[i], 'A' + i); // %dは出た文字の回数、%cは文字を出力する
     }
 
     //小文字の場合
     for (int i = 0; i < 26; i++)
     {
-        printf("%d %c\n", allower_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
+        printf("%d %c\n", sanjigen_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
     }
 
     return 0;
