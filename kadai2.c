@@ -9,7 +9,8 @@ int main(void)
     FILE *outputFile;
 
     // アルファベットの出現頻度を記録するための配列
-    int alphabet_counts[26] = {0};
+    int allower_counts[26] = {0};   // 小文字の場合
+    int alupper_counts[26] = {0};   // 大文字の場合
     int ch; // 読み込んだ文字を格納
 
     // 入力ファイルを開く(読み込みモードで)
@@ -38,12 +39,12 @@ int main(void)
             if (isupper(ch))
             {
                 int index_A = ch - 'A';
-                alphabet_counts[index_A]++;
+                alupper_counts[index_A]++;
             }
-            else
+            else if (islower(ch))
             {
                 int index_a = ch - 'a';
-                alphabet_counts[index_a]++;
+                allower_counts[index_a]++;
             }
 
             fputc(ch, outputFile);
@@ -62,11 +63,19 @@ int main(void)
     fclose(inputFile);
     fclose(outputFile);
 
-    printf("出力が完了しました。\n");
+    printf("出力が完了しました。一回も出なかった文字は以下の通りです\n");
     printf("------------------------------\n");
+
+    //大文字の場合
     for (int i = 0; i < 26; i++)
     {
-        printf("%d %c\n", alphabet_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
+        printf("%d %c\n", alupper_counts[i], 'A' + i); // %dは出た文字の回数、%cは文字を出力する
+    }
+
+    //小文字の場合
+    for (int i = 0; i < 26; i++)
+    {
+        printf("%d %c\n", allower_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
     }
 
     return 0;
