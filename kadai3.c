@@ -31,6 +31,60 @@ void update_ngram_count(const char *ngram);
 int compare_bigram(const void *a, const void *b);
 int compare_ngram(const void *a, const void *b);
 
+// 2文字の場合
+void update_bigram_count(const char *bigram)
+{
+    for (int i = 0; i < unique_bigram_count; i++)
+    {
+        if (strcmp(bigram_list[i].bigram, bigram) == 0)
+        {
+            bigram_list[i].count++;
+            return;
+        }
+    }
+    if (unique_bigram_count < MAX_UNIGUE_BIGRAMS)
+    {
+        strcmp(bigram_list[unique_bigram_count].bigram, bigram);
+        bigram_list[unique_bigram_count].count = 1;
+        unique_bigram_count++;
+    }
+}
+
+// 3文字の場合
+void update_ngram_count(const char *ngram)
+{
+    for (int i = 0; i < unique_ngram_count; i++)
+    {
+        if (strcmp(ngram_list[i].ngram, ngram) == 0)
+        {
+            ngram_list[i].count++;
+            return;
+        }
+    }
+    if (unique_ngram_count < MAX_UNIGUE_NRAMS)
+    {
+        strcmp(ngram_list[unique_ngram_count].ngram, ngram);
+        ngram_list[unique_ngram_count].count = 1;
+        unique_ngram_count++;
+    }
+}
+
+// 2文字をcountの降順で比較する
+int compare_bigram(const void *a, const void *b)
+{
+    BigramFreq *freq_a = (BigramFreq *)a;
+    BigramFreq *freq_b = (BigramFreq *)b;
+    // b - a で降順ソート
+    return freq_b->count - freq_a - > count;
+}
+int compare_ngram(const void *a, const void *b)
+{
+    Ngram *freq_a = (Ngram *)a;
+    Ngram *freq_b = (Ngram *)b;
+    // b - a で降順ソート
+    return freq_b->count - freq_a - > count;
+}
+
 int main(void)
 {
 
@@ -52,15 +106,6 @@ int main(void)
         exit(1);
     }
 
-    // 出力ファイルを開く(書き込みモードで)
-    outputFile = fopen("Output3.txt", "w");
-    if (outputFile == NULL)
-    {
-        printf("エラー：出力ファイルを開けません。\n");
-        fclose(inputFile); // 　開いている入力ファイルを閉じる
-        exit(1);
-    }
-
     // メインループ処理
     while ((ch = fgetc(inputFile)) != EOF)
     {
@@ -74,7 +119,7 @@ int main(void)
             update_bigram_count(current_bigram);
         }
         // 条件に応じて文字を処理(三文字)
-        else if (isalpha(prevv_ch) && isalpha(prev_ch) && isalpha(ch))
+        if (isalpha(prevv_ch) && isalpha(prev_ch) && isalpha(ch))
         {
             char current_ngram[4];
             current_ngram[0] = tolower(prevv_ch);
@@ -89,7 +134,6 @@ int main(void)
 
     // ファイルを閉じる
     fclose(inputFile);
-    fclose(outputFile);
 
     printf("処理中です\n");
     printf("------------------------------\n");
@@ -98,53 +142,4 @@ int main(void)
     qsort(bigram_list, unique_bigram_count, sizeof(BigramFreq), compare_bigram);
     // 3文字の並べ替え
     qsort(ngram_list, unique_ngram_count, sizeof(Ngram), compare_ngram);
-
-    // 2文字の場合
-    void update_bigram_count(const char *bigram)
-    {
-        for (int i = 0; i < unique_bigram_count; i++)
-        {
-            if (strcmp(bigram_list[i].bigram, bigram) == 0)
-            {
-                bigram_list[i].unique_bigram_count++;
-                return;
-            }
-            if(unique_bigram_count < MAX_UNIGUE_BIGRAMS){
-                strcmp(bigram_list[unique_bigram_count].bigram, current_bigram);
-                list[unique_bigram_count].count = 1;
-                unique_bigram_count++;
-            }
-        }
-    }
-
-    // 3文字の場合
-    void update_ngram_count(const char *ngram)
-    {
-        for (int i = 0; i < unique_ngram_count; i++)
-        {
-            if (strcmp(ngram_list[i], ngram) == 0){
-                ngram_list[i].unique_ngram_count++;
-                return;
-            }
-            if(unique_ngram_count < MAX_UNIGUE_ngramS){
-                strcmp(ngram_list[unique_ngram_count].ngram, current_ngram);
-                list[unique_ngram_count].count = 1;
-                unique_ngram_count++;
-            }
-        }
-    }
-
-    // 2文字をcountの降順で比較する
-    int compare_bigram(const void *a, const void *b){
-        BigramFreq *freq_a = (BigramFreq*) a;
-        BigramFreq *freq_b = (BigramFreq*) b;
-        // b - a で降順ソート
-        return freq_b->count - freq_a- > count;
-    }
-    int compare_ngram(const void *a, const void *b){
-        Ngram *freq_a = (Ngram*) a;
-        Ngram *freq_b = (Ngram*) b;
-        // b - a で降順ソート
-        return freq_b->count - freq_a- > count;
-    }
 }
