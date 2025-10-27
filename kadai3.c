@@ -104,10 +104,15 @@ int main(void)
     {
         for (int i = 0; i < unique_bigram_count; i++)
         {
-            if (strcmp(current_bigram[i], bigram_list[i].bigram == 0))
+            if (strcmp(bigram_list[i].bigram, bigram) == 0)
             {
                 bigram_list[i].unique_bigram_count++;
                 return;
+            }
+            if(unique_bigram_count < MAX_UNIGUE_BIGRAMS){
+                strcmp(bigram_list[unique_bigram_count].bigram, current_bigram);
+                list[unique_bigram_count].count = 1;
+                unique_bigram_count++;
             }
         }
     }
@@ -117,12 +122,29 @@ int main(void)
     {
         for (int i = 0; i < unique_ngram_count; i++)
         {
-            if (strcmp(current_ngram[i], ngram_list[i] == 0)){
+            if (strcmp(ngram_list[i], ngram) == 0){
                 ngram_list[i].unique_ngram_count++;
                 return;
+            }
+            if(unique_ngram_count < MAX_UNIGUE_ngramS){
+                strcmp(ngram_list[unique_ngram_count].ngram, current_ngram);
+                list[unique_ngram_count].count = 1;
+                unique_ngram_count++;
             }
         }
     }
 
-    return 0;
+    // 2文字をcountの降順で比較する
+    int compare_bigram(const void *a, const void *b){
+        BigramFreq *freq_a = (BigramFreq*) a;
+        BigramFreq *freq_b = (BigramFreq*) b;
+        // b - a で降順ソート
+        return freq_b->count - freq_a- > count;
+    }
+    int compare_ngram(const void *a, const void *b){
+        Ngram *freq_a = (Ngram*) a;
+        Ngram *freq_b = (Ngram*) b;
+        // b - a で降順ソート
+        return freq_b->count - freq_a- > count;
+    }
 }
