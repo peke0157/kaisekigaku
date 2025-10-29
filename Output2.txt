@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Shadow is the absence of light  merely the obstruction of the luminous rays by an opaque body  Shadow is of the nature of darkness  Light  on an object  is of the nature of a luminous body  one conceals and the other reveals  They are always associated and inseparable from all objects  But shadow is a more powerful agent than light  for it can impede and entirely deprive bodies of their light  while light can never entirely expel shadow from a body  that is from an opaque body 
 
     
@@ -17,3 +18,21 @@ The beginnings and ends of shadow lie between the light and darkness and may be 
 The forms of bodies could not be understood in detail but for shadow 
 
     
+=======
+                                                                                                                                    
+                                                                                              
+                                                                                                                                                                                                                                                                
+    
+                                                                                                                                                            
+
+                                                                                                                                   
+    
+                                                                                               
+
+                                                                                     
+
+                                                                                                                                
+                                                       
+
+                                                                     
+>>>>>>> dev
