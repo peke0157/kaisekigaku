@@ -5,7 +5,7 @@
 
 #define MAX_UNIGUE_BIGRAMS 5000
 #define MAX_UNIGUE_NRAMS 5000
-#define TOP_N 15
+#define TOP_N 30
 
 // 2組と出現頻度を保存する構造体
 typedef struct
@@ -44,7 +44,7 @@ void update_bigram_count(const char *bigram)
     }
     if (unique_bigram_count < MAX_UNIGUE_BIGRAMS)
     {
-        strcmp(bigram_list[unique_bigram_count].bigram, bigram);
+        strcpy(bigram_list[unique_bigram_count].bigram, bigram);
         bigram_list[unique_bigram_count].count = 1;
         unique_bigram_count++;
     }
@@ -63,7 +63,7 @@ void update_ngram_count(const char *ngram)
     }
     if (unique_ngram_count < MAX_UNIGUE_NRAMS)
     {
-        strcmp(ngram_list[unique_ngram_count].ngram, ngram);
+        strcpy(ngram_list[unique_ngram_count].ngram, ngram);
         ngram_list[unique_ngram_count].count = 1;
         unique_ngram_count++;
     }
@@ -75,14 +75,14 @@ int compare_bigram(const void *a, const void *b)
     BigramFreq *freq_a = (BigramFreq *)a;
     BigramFreq *freq_b = (BigramFreq *)b;
     // b - a で降順ソート
-    return freq_b->count - freq_a - > count;
+    return freq_b->count - freq_a -> count;
 }
 int compare_ngram(const void *a, const void *b)
 {
     Ngram *freq_a = (Ngram *)a;
     Ngram *freq_b = (Ngram *)b;
     // b - a で降順ソート
-    return freq_b->count - freq_a - > count;
+    return freq_b->count - freq_a -> count;
 }
 
 int main(void)
@@ -129,7 +129,7 @@ int main(void)
             update_ngram_count(current_ngram);
         }
         prev_ch = ch;
-        prevv_ch = prevv_ch;
+        prevv_ch = prev_ch;
     }
 
     // ファイルを閉じる
@@ -142,4 +142,23 @@ int main(void)
     qsort(bigram_list, unique_bigram_count, sizeof(BigramFreq), compare_bigram);
     // 3文字の並べ替え
     qsort(ngram_list, unique_ngram_count, sizeof(Ngram), compare_ngram);
+
+    //--- 結果の表示---//
+    // 2次元のとき
+    // 表示する上限を決める
+    int limit_bigram = (unique_bigram_count > TOP_N) ? TOP_N : unique_bigram_count;
+
+    for(int i = 0; i < limit_bigram; i++){
+        printf("2組の出現頻度TOP %8d: %s\n", bigram_list[i].count, bigram_list[i].bigram);
+    }
+    printf("------------------------------\n");
+
+    // 3次元の時
+    int limit_ngram = (unique_ngram_count > TOP_N) ? TOP_N : unique_ngram_count;
+    for(int i = 0; i < limit_ngram; i++){
+        printf("3組の出現頻度TOP %8d: %s\n", ngram_list[i].count, ngram_list[i].ngram);
+    }
+    printf("------------------------------\n");
+
+
 }
