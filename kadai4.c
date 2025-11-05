@@ -9,11 +9,9 @@ int main(void)
     FILE *inputFile;
     FILE *outputFile;
 
-    // アルファベットの出現頻度を記録するための配列
-    int allower_counts[26] = {0};   // 小文字の場合
-    int alupper_counts[26] = {0};   // 大文字の場合
     int ch; // 読み込んだ文字を格納
     long M = 0;
+    int k;      // 乱数を生成する変数
 
     srand(time(NULL));              // 乱数系列を初期化
 
@@ -40,12 +38,18 @@ int main(void)
         // 条件に応じて文字を処理
         if (isalpha(ch))
         {
-            M += 1;
             fputc(ch, outputFile);
+        }
+        M += 1;
+        for (int i = 0; i < 100; i++){
+            k = rand() % M;
+            fseek(inputFile, k, SEEK_SET);
+            fgetc(k);
+            fputc(k, outputFile);
         }
     }
     // 数えたMの数
-    printf("処理した文字の総数(M): %d\n");
+    printf("処理した文字の総数(M): %ld\n", M);
 
     
 
@@ -55,19 +59,6 @@ int main(void)
 
     printf("出力が完了しました。一回も出なかった文字は以下の通りです\n");
     printf("------------------------------\n");
-
-   /*
-   for (int i = 0; i < 26; i++)
-   {
-       printf("%d %c\n", alupper_counts[i], 'A' + i); // %dは出た文字の回数、%cは文字を出力する
-   }
-
-   //小文字の場合
-   for (int i = 0; i < 26; i++)
-   {
-       printf("%d %c\n", allower_counts[i], 'a' + i); // %dは出た文字の回数、%cは文字を出力する
-   }
-   */ //大文字の場合
 
     return 0;
 }
