@@ -63,7 +63,7 @@ int main(void)
     fclose(inputFile);
     fclose(outputFile);
 
-    printf("出力が完了しました。一回も出なかった文字は以下の通りです\n");
+    printf("出力が完了しました。\n");
     printf("------------------------------\n");
 
     //大文字の場合
