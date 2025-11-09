@@ -10,7 +10,7 @@ int main(void)
     FILE *inputFile;
     FILE *outputFile;
 
-    int ch, next_ch, ch1, next_ch1; // 読み込んだ文字を格納
+    int ch, next_ch, ch1, next_ch1, next_ch2; // 読み込んだ文字を格納
     long M = 0;
     int k, k_prime, k1, k1_prime; // 乱数を生成する変数
     int A;      // 保存用(二次元)
@@ -76,17 +76,68 @@ int main(void)
                 }
             }
         }
-
+        // Aが見つからなかったとき
+        if(!found){
+            rewind(inputFile);
+            long currentpos = 0;        // k_priceの位置まで戻る
+            while ((currentpos < k_prime) && (ch == fgetc(inputFile)))
+            {
+                if(ch == A){
+                    found = 1;
+                    next_ch = fgetc(inputFile);
+                    if(next_ch != EOF){
+                        fputc(next_ch, outputFile);
+                        break;
+                    }
+                }
+            }
+            
+        }
+        // 全体を見てもなかった時のリセット処理
+        if(!found){
+            k = rand() % (M - 1);
+            fseek(inputFile, k, SEEK_SET);
+            ch = fgetc(inputFile);
+            A = fgetc(inputFile);
+            fputc(A, outputFile);
+            A = next_ch;
+        }
     }
     
     // 3次元の時
-    for (int i = 0; i < M; i++)
-    {
-        k1 = rand() % M;                                 // M以下の任意の数kを得る
-        fseek(inputFile, k, SEEK_SET);                  // ファイルの中のk番目の数を調べる
-        ch = fgetc(inputFile);                          // k番目の1文字を読み込む
-        A = ch1;
-        fputc(ch, outputFile);
+        k1 = rand() % (M -2);                                 // M以下の任意の数kを得る
+        fseek(inputFile, k1, SEEK_SET);                  // ファイルの中のk番目の数を調べる
+        ch1 = fgetc(inputFile);                          // k番目の1文字を読み込む
+        a1 = fgetc(inputFile);                           // k+1番目の1文字を読み込む
+        a2 = fgetc(inputFile);                          // k+2番目の1文字を読み込む
+        fputc(ch1, outputFile);
+        fputc(a1, outputFile);
+        fputc(a2, outputFile);
+
+    // すでに3文字出力しているので繰り返す範囲を-3する
+    for (int i = 0; i < (NUM_TO_GENERATE - 3); i++){
+        int found = 0;      // Aに続く文字が見つかったかのフラグ
+
+        k1_prime = rand() % M;
+
+        fseek(inputFile, k1_prime, SEEK_SET);
+
+        while((ch1 = fgetc(inputFile)) != EOF){
+            // Aが見つかった時
+            if(ch1 == a1 && next_ch1 == a2){
+                next_ch1 = fgetc(inputFile);
+                if(next_ch1 != EOF){
+
+                    fputc(next_ch1, outputFile);
+                    a1 = a2;
+                    a2 = next_ch1;
+                    found = 1;
+                    break;           
+                }
+            }
+        }
+        // Aが見つからなかったとき
+
     }
 
     // 数えたMの数

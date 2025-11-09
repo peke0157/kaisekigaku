@@ -8,9 +8,6 @@ int main(void)
     FILE *inputFile;
     FILE *outputFile;
 
-    /*char inputFilename = "Input.txt";
-    char outputFilename = "output.txt";*/
-
     int ch; // 読み込んだ文字を格納
 
     // 入力ファイルを開く(読み込みモードで)
