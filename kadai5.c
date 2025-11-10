@@ -3,14 +3,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUM_TO_GENERATE 100000000
+#define NUM_TO_GENERATE 10000000
 int main(void)
 {
     // ファイルポインタの宣言
     FILE *inputFile;
     FILE *outputFile;
 
-    int ch, next_ch, ch1, next_ch1, next_ch2; // 読み込んだ文字を格納
+    int ch, next_ch, ch1, next_ch1; // 読み込んだ文字を格納
     long M = 0;
     int k, k_prime, k1, k1_prime; // 乱数を生成する変数
     int A;      // 保存用(二次元)
@@ -79,8 +79,8 @@ int main(void)
         // Aが見つからなかったとき
         if(!found){
             rewind(inputFile);
-            long currentpos = 0;        // k_priceの位置まで戻る
-            while ((currentpos < k_prime) && (ch == fgetc(inputFile)))
+            long currentpos1 = 0;        // k_priceの位置まで戻る
+            while ((currentpos1 < k_prime) && (ch == fgetc(inputFile)))
             {
                 if(ch == A){
                     found = 1;
@@ -105,7 +105,7 @@ int main(void)
     }
     
     // 3次元の時
-        k1 = rand() % (M -2);                                 // M以下の任意の数kを得る
+        k1 = rand() % (M - 2);                                 // M以下の任意の数kを得る
         fseek(inputFile, k1, SEEK_SET);                  // ファイルの中のk番目の数を調べる
         ch1 = fgetc(inputFile);                          // k番目の1文字を読み込む
         a1 = fgetc(inputFile);                           // k+1番目の1文字を読み込む
@@ -124,20 +124,51 @@ int main(void)
 
         while((ch1 = fgetc(inputFile)) != EOF){
             // Aが見つかった時
-            if(ch1 == a1 && next_ch1 == a2){
-                next_ch1 = fgetc(inputFile);
-                if(next_ch1 != EOF){
-
-                    fputc(next_ch1, outputFile);
-                    a1 = a2;
-                    a2 = next_ch1;
-                    found = 1;
-                    break;           
+            if(ch1 == a1){
+                int ch2 = fgetc(inputFile);
+                if(ch2 == a2){
+                    next_ch1 = fgetc(inputFile);
+                    if(next_ch1 != EOF){
+    
+                        fputc(next_ch1, outputFile);
+                        a1 = a2;
+                        a2 = next_ch1;
+                        found = 1;
+                        break;           
+                    }
                 }
             }
         }
         // Aが見つからなかったとき
-
+        if(!found){
+            rewind(inputFile);
+            int currentpos2 = 0;
+            while ((currentpos2 < k1_prime) && (ch1 = fgetc(inputFile)))
+            {
+                if(ch1 == A){
+                    found = 1;
+                    a2 = fgetc(inputFile);
+                    next_ch1 = fgetc(inputFile);
+                    if(a2 == next_ch1 == EOF){
+                        fputc(a2, outputFile);
+                        fputc(next_ch1, outputFile);
+                        break;
+                    }
+                }
+            }
+        }
+        // 全体を見てもなかった時のリセット処理
+        if(!found){
+            k1 = rand() % (M - 2);
+            fseek(inputFile, k1, SEEK_SET);
+            ch1 = fgetc(inputFile);
+            a1 = fgetc(inputFile);
+            a2 = fgetc(inputFile);
+            fputc(a1, outputFile);
+            fputc(a2, outputFile);
+            a1 = a2;
+            a2 = next_ch1;
+        }
     }
 
     // 数えたMの数
