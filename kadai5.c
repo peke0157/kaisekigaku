@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUM_TO_GENERATE 10000000
+#define NUM_TO_GENERATE 10000
 int main(void)
 {
     // ファイルポインタの宣言
     FILE *inputFile;
-    FILE *outputFile;
+    FILE *outputFile1;
+    FILE *outputFile2;
 
     int ch, next_ch, ch1, next_ch1; // 読み込んだ文字を格納
     long M = 0;
@@ -27,8 +28,15 @@ int main(void)
     }
 
     // 出力ファイルを開く(書き込みモードで)
-    outputFile = fopen("Output5.txt", "w");
-    if (outputFile == NULL)
+    outputFile1 = fopen("Output5_1.txt", "w");
+    outputFile2 = fopen("Output5_2.txt", "w");
+    if (outputFile1 == NULL)
+    {
+        printf("エラー：出力ファイルを開けません。\n");
+        fclose(inputFile); // 　開いている入力ファイルを閉じる
+        exit(1);
+    }
+    if (outputFile2 == NULL)
     {
         printf("エラー：出力ファイルを開けません。\n");
         fclose(inputFile); // 　開いている入力ファイルを閉じる
@@ -44,7 +52,8 @@ int main(void)
     if (M == 0){
         printf("入力ファイルが空です");
         fclose(inputFile);
-        fclose(outputFile);
+        fclose(outputFile1);
+        fclose(outputFile2);
         return 0;
     } 
     // 2次元のとき
@@ -52,8 +61,8 @@ int main(void)
         fseek(inputFile, k, SEEK_SET);                  // ファイルの中のk番目の数を調べる
         ch = fgetc(inputFile);                          // k番目の1文字を読み込む
         A = fgetc(inputFile);
-        fputc(ch, outputFile);
-        fputc(A, outputFile);
+        fputc(ch, outputFile1);
+        fputc(A, outputFile1);
 
     // すでに二文字出力しているので繰り返す範囲を-2する
     for (int i = 0; i < (NUM_TO_GENERATE - 2); i++){
@@ -69,7 +78,7 @@ int main(void)
                 next_ch = fgetc(inputFile);
                 if(next_ch != EOF){
 
-                    fputc(next_ch, outputFile);
+                    fputc(next_ch, outputFile1);
                     A = next_ch;
                     found = 1;
                     break;           
@@ -80,13 +89,22 @@ int main(void)
         if(!found){
             rewind(inputFile);
             long currentpos1 = 0;        // k_priceの位置まで戻る
-            while ((currentpos1 < k_prime) && (ch == fgetc(inputFile)))
+            while ((ch == fgetc(inputFile)) != EOF)
             {
+                currentpos1 = ftell(inputFile);
+                if(currentpos1 >= k_prime){
+                    break;
+                }
                 if(ch == A){
-                    found = 1;
+                    
                     next_ch = fgetc(inputFile);
                     if(next_ch != EOF){
-                        fputc(next_ch, outputFile);
+                        fputc(next_ch, outputFile1);
+                        A = next_ch;
+                        found = 1;
+                        break;
+                    }
+                    else{
                         break;
                     }
                 }
@@ -99,8 +117,7 @@ int main(void)
             fseek(inputFile, k, SEEK_SET);
             ch = fgetc(inputFile);
             A = fgetc(inputFile);
-            fputc(A, outputFile);
-            A = next_ch;
+            fputc(A, outputFile1);
         }
     }
     
@@ -110,9 +127,9 @@ int main(void)
         ch1 = fgetc(inputFile);                          // k番目の1文字を読み込む
         a1 = fgetc(inputFile);                           // k+1番目の1文字を読み込む
         a2 = fgetc(inputFile);                          // k+2番目の1文字を読み込む
-        fputc(ch1, outputFile);
-        fputc(a1, outputFile);
-        fputc(a2, outputFile);
+        fputc(ch1, outputFile2);
+        fputc(a1, outputFile2);
+        fputc(a2, outputFile2);
 
     // すでに3文字出力しているので繰り返す範囲を-3する
     for (int i = 0; i < (NUM_TO_GENERATE - 3); i++){
@@ -130,11 +147,14 @@ int main(void)
                     next_ch1 = fgetc(inputFile);
                     if(next_ch1 != EOF){
     
-                        fputc(next_ch1, outputFile);
+                        fputc(next_ch1, outputFile2);
                         a1 = a2;
                         a2 = next_ch1;
                         found = 1;
                         break;           
+                    }
+                    else if (ch2 != EOF){
+                        fseek(inputFile, -1, SEEK_CUR);
                     }
                 }
             }
@@ -143,15 +163,23 @@ int main(void)
         if(!found){
             rewind(inputFile);
             int currentpos2 = 0;
-            while ((currentpos2 < k1_prime) && (ch1 = fgetc(inputFile)))
+            while ((ch1 = fgetc(inputFile)) != EOF)
             {
+                currentpos2 = ftell(inputFile);     // 現在の位置を取得
+                if (currentpos2 >= k1_prime){
+                    break; 
+
+                }
                 if(ch1 == A){
                     found = 1;
                     a2 = fgetc(inputFile);
                     next_ch1 = fgetc(inputFile);
                     if(a2 == next_ch1 == EOF){
-                        fputc(a2, outputFile);
-                        fputc(next_ch1, outputFile);
+                        fputc(a2, outputFile2);
+                        fputc(next_ch1, outputFile2);
+                        break;
+                    }
+                    else{
                         break;
                     }
                 }
@@ -164,10 +192,11 @@ int main(void)
             ch1 = fgetc(inputFile);
             a1 = fgetc(inputFile);
             a2 = fgetc(inputFile);
-            fputc(a1, outputFile);
-            fputc(a2, outputFile);
-            a1 = a2;
-            a2 = next_ch1;
+            if(a2 != EOF){
+                fputc(a2, outputFile2);
+            }
+            fputc(a1, outputFile2);
+            fputc(a2, outputFile2);
         }
     }
 
