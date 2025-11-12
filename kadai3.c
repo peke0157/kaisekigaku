@@ -77,6 +77,7 @@ int compare_bigram(const void *a, const void *b)
     // b - a で降順ソート
     return freq_b->count - freq_a -> count;
 }
+// 3文字をcountの降順で比較
 int compare_ngram(const void *a, const void *b)
 {
     Ngram *freq_a = (Ngram *)a;
